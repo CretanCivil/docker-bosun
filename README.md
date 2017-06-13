@@ -12,3 +12,12 @@
 
 进行了改造，redis进行metric信息汇总，官方bosun是不对用户区分的，我进行了区分。
 配置文件bosun.toml我把anno，tsdb全部关闭了。因为我只要他的metric整理部分。
+
+## 启动
+
+```
+export TSDB_URL=172.29.231.177
+export REDIS_DATA_PATH=/tmp/redis_data
+docker-compose up
+
+```

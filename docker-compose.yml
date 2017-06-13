@@ -1,4 +1,7 @@
 version: '2'
+#export TSDB_URL=172.29.231.177
+#export REDIS_DATA_PATH=/tmp/redis_data
+#$ docker-compose up
 
 services:
   tsdbrelay:
@@ -6,29 +9,35 @@ services:
     build: ./tsdbrelay
     ports:
       - "4242:4242"
-    #volumes:
-    #  - ./directory/logs:/opt/librenms/logs \
-    #  - ./directory/rrd:/opt/librenms/rrd \
-    #environment:
-    #  - DB_HOST=db
-    #  - DB_NAME=librenms
-    #  - DB_USER=librenms
-    #  - DB_PASS=wangwang
-    #  - POLLERS=16
-    #  - BASE_URL=http://localhost:9080
     links:
       - bosun:bosun
+      - redis:redis.docker
     depends_on:
       - bosun
-    command: tsdbrelay -b bosun:8101 -t 172.29.231.177:4243 
+    command: tsdbrelay -b bosun:8101 -t ${TSDB_URL}:4243 
     restart: always
+    container_name: tsdbrelay  
   bosun:
     build: ./bosun
     command: bosun -c /etc/bosun/bosun.toml -r true
     ports:
       - "8101:8101"
     restart: always  
-    #volumes:
-    #  - /directory/mysql:/var/lib/mysql
-    #environment:
-    #  - MYSQL_ROOT_PASSWORD=wangwang
+    links:
+      - redis:redis.docker
+    container_name: bosun  
+  rabbitmq:
+    image: rabbitmq:3-management
+    expose:
+      - "5672"
+    ports:
+      - "15672:15672"
+    container_name: rabbitmq
+
+  redis:
+    image: redis:3-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - ${REDIS_DATA_PATH}:/data
+    restart: always
+    container_name: redis  

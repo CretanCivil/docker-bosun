@@ -72,9 +72,8 @@ SearchSince = "72h"
 # for production setups. Defaults for ledis are below but would be ignored since redis takes
 # precedence
 [DBConf]
-	RedisHost = "172.29.231.177:6379"
-	RedisPassword = "123456"
-        LedisDir = "ledis_data"
+	RedisHost = "redis.docker:6379"
+    LedisDir = "ledis_data"
 	LedisBindAddr = "127.0.0.1:9565"
 
 # Configuration to enable Bosun to be able to send email notifications
