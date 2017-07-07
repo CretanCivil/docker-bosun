@@ -40,4 +40,6 @@ services:
     volumes:
       - ${REDIS_DATA_PATH}:/data
     restart: always
-    container_name: redis  
+    container_name: redis
+    ports:
+      - "6379:6379"
