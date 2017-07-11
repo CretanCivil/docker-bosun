@@ -19,7 +19,7 @@ services:
     container_name: tsdbrelay  
   bosun:
     build: ./bosun
-    command: bosun -c /etc/bosun/bosun.toml -r true
+    command: bosun -c /etc/bosun/bosun.toml
     ports:
       - "8101:8101"
     restart: always  
